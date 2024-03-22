@@ -12,8 +12,8 @@ spec:
       appSecret:
         secretName: datadog-secret
         keyName: app-key
-      kubelet:
-        tlsVerify: false
+    kubelet:
+      tlsVerify: false
   override:
     clusterAgent:
       image:
@@ -21,3 +21,13 @@ spec:
     nodeAgent:
       image:
         name: gcr.io/datadoghq/agent:latest
+  features:
+    eventCollection:
+      collectKubernetesEvents: true
+    npm:
+      enabled: true
+    logCollection:
+      enabled: true
+      containerCollectAll: true
+    liveProcessCollection:
+      enabled: true
