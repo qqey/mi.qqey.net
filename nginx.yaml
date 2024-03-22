@@ -1,0 +1,51 @@
+apiVersion: v1 # 使用するKubernetes APIバージョンを定義
+kind: Service # PodのネットワークであるServiceリソースを定義
+metadata: # 名前やラベルを指定
+  labels:
+    app: nginx-app
+    name: nginx
+  name: nginx-service
+spec: # spec内にリソースの仕様を記述する
+  selector: # 同一のラベルを定義しているリソースを参照
+    app: nginx-app
+    name: nginx
+  type: NodePort # Kubenetes外からアクセスできるようにNodePortを指定(ホストOSからNginxの画面が確認できるようにする)
+  ports:
+  - name: nginx-port #ポート番号を指定
+    port: 80
+    protocol: TCP
+    targetPort: nginx-port
+---
+apiVersion: apps/v1
+kind: Deployment # Podの自己修復機能を持つDeploymentリソースを定義
+metadata:
+  labels:
+    app: nginx-app
+    name: nginx
+  name: nginx
+spec:
+  replicas: 1 # 作成するPod数を定義
+  selector:
+    matchLabels:
+      app: nginx-app
+      name: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx-app
+        name: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest # NginxのDockerHubに記載されているDockerImageの名称とバージョンを指定
+        resources:
+          limits:
+            cpu: "0.5" # Limit CPU usage to 0.5 cores
+            memory: "512Mi" # Limit memory usage to 512MB
+          requests:
+            cpu: "0.1" # Request at least 0.1 cores of CPU
+            memory: "256Mi" # Request at least 256MB of memory
+        ports:
+        - containerPort: 80 # Podから解放するポート番号を定義
+          name: nginx-port
+          protocol: TCP
