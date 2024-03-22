@@ -19,6 +19,3 @@ spec:
     nodeAgent:
       image:
         name: gcr.io/datadoghq/agent:latest
-  datadog:
-    kubelet:
-      tlsVerify: false
