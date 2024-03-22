@@ -31,3 +31,8 @@ spec:
       containerCollectAll: true
     liveProcessCollection:
       enabled: true
+    admissionController:
+      enabled: true
+      mutateUnlabelled: false
+    kubeStateMetricsCore:
+      enabled: true
